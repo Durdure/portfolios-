@@ -7,11 +7,19 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    letterSpacing: {
+      tighter: "-0.05em",
+      tight: "-0.025em",
+      normal: "0",
+      wide: "0.025em",
+      wider: "0.05em",
+      widest: "0.1em",
+    },
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      fontFamily: {
+        neue: ["Bebas Neue", "sans-serif"],
+        kaushan: ["Kaushan Script", "cursive"],
+        inter: ["Inter", "sans-serif"],
       },
     },
   },
