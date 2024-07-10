@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import * as THREE from "three";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
 
 function ScrollModelAnimation() {
     const [loading, setLoading] = useState(true);
@@ -11,7 +12,7 @@ function ScrollModelAnimation() {
 
     const refContainer = useRef();
 
-    useEffect(() => {
+    useEffect(()=> {
         const parameters = {
             materialColor: "#ff0000",
         };
@@ -49,6 +50,7 @@ function ScrollModelAnimation() {
                 material
             );
 
+
             mesh1.position.x = 3;
             mesh2.position.x = -3;
             mesh3.position.x = 3;
@@ -61,26 +63,29 @@ function ScrollModelAnimation() {
             mesh4.position.y = objectDistance * 3;
             mesh5.position.y = objectDistance * 4;
 
+
             scene.add(mesh1, mesh2, mesh3, mesh4, mesh5);
 
             const sectionMeshes = [mesh1, mesh2, mesh3, mesh4, mesh5];
             mesh1.visible = false;
 
+
             const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
             directionalLight.position.set(1, 1, 0);
             directionalLight.castShadow = true;
-
             scene.add(directionalLight);
+
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
             scene.add(ambientLight);
+
 
             const particlesGeometry = new THREE.BufferGeometry();
             const count = 1000;
             const positions = new Float32Array(count * 3);
             const colors = new Float32Array(count * 3);
-
-            for (let i = 0; i < count * 3; i++) {
+ 
+            for (let i =0;i< count*3; i++){
                 positions[i * 3 + 0] = (Math.random() - 0.5) * 10;
                 positions[i * 3 + 1] =
                     objectDistance * 0.5 - Math.random() * objectDistance * sectionMeshes.length;
@@ -88,8 +93,16 @@ function ScrollModelAnimation() {
                 colors[i] = Math.random();
             }
 
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            particlesGeometry.setAttribute(
+                'position', 
+                 new THREE.BufferAttribute(positions, 3)
+                );
+            particlesGeometry.setAttribute(
+                'color', 
+                new THREE.BufferAttribute(colors, 3)
+            );
+
+
 
             const particlesMaterial = new THREE.PointsMaterial({
                 size: 0.1,
@@ -102,13 +115,16 @@ function ScrollModelAnimation() {
                 vertexColors: true,
             });
 
+
             const particles = new THREE.Points(particlesGeometry, particlesMaterial);
             scene.add(particles);
+
 
             const sizes = {
                 width: window.innerWidth,
                 height: window.innerHeight,
             };
+
 
             const cameraGroup = new THREE.Group();
             scene.add(cameraGroup);
@@ -119,28 +135,52 @@ function ScrollModelAnimation() {
                 0.1,
                 100
             );
-            camera.position.z = 10;
+
+
+            camera.position.z = 6;
             cameraGroup.add(camera);
-            
+
 
             const renderer = new THREE.WebGLRenderer({
                 antialias: true,
                 alpha: true,
             });
+
+
             renderer.setSize(sizes.width, sizes.height);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.outputColorSpace = THREE.SRGBColorSpace; // Updated line
+            (renderer as any).outputEncoding = THREE.sRGBEncoding;
             renderer.shadowMap.enabled = true;
             (container as HTMLDivElement).appendChild(renderer.domElement);
 
-             const controls = new OrbitControls(camera, renderer.domElement);
+
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.autoRotate = true;
+
+
+            let skrollY = window.scrollY;
+            let currentSection = 0;
+
+            window.addEventListener('scroll', () => {
+                skrollY = window.scrollY;
+                const newSection = Math.round(skrollY / sizes.height);
+
+                if( newSection !== currentSection) {
+                    currentSection = newSection;
+                }
+
+            });
+
+
+
         }
-    }
+    },[])
+
     return (
         <div>
             ScrollModelAnimation
         </div>
     );
-}
-
+}     
+        
 export default ScrollModelAnimation;
