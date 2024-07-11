@@ -167,7 +167,6 @@ function ScrollModelAnimation() {
             });
             renderer.setSize(sizes.width, sizes.height);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            (renderer as any).outputEncoding = THREE.sRGBEncoding;
             renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
 
